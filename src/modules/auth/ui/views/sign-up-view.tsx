@@ -34,7 +34,6 @@ const formSchema = z
   });
 
 export const SignUpView = () => {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -57,11 +56,32 @@ export const SignUpView = () => {
         name: data.name,
         email: data.email,
         password: data.password,
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
           setPending(false);
-          router.push("/");
+        },
+        onError: ({ error }) => {
+          setPending(false);
+          setError(error.message);
+        },
+      }
+    );
+  };
+
+  const onSocial = async (provider: "github" | "google") => {
+    setError(null);
+    setPending(true);
+
+    authClient.signIn.social(
+      {
+        provider: provider,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          setPending(false);
         },
         onError: ({ error }) => {
           setPending(false);
@@ -177,11 +197,7 @@ export const SignUpView = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <Button
                     disabled={pending}
-                    onClick={() => {
-                      authClient.signIn.social({
-                        provider: "google",
-                      });
-                    }}
+                    onClick={() => onSocial("google")}
                     variant="outline"
                     type="button"
                     className="w-full cursor-pointer"
@@ -191,11 +207,7 @@ export const SignUpView = () => {
                   <Button
                     variant="outline"
                     disabled={pending}
-                    onClick={() => {
-                      authClient.signIn.social({
-                        provider: "github",
-                      });
-                    }}
+                    onClick={() => onSocial("github")}
                     type="button"
                     className="w-full cursor-pointer"
                   >
