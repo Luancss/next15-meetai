@@ -1,12 +1,8 @@
 "use client";
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { OctagonAlertIcon } from "lucide-react";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Alert, AlertTitle } from "@/components/ui/alert";
 import {
   Form,
   FormControl,
@@ -15,8 +11,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { OctagonAlertIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -24,6 +27,10 @@ const formSchema = z.object({
 });
 
 export const SignInView = () => {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,12 +39,34 @@ export const SignInView = () => {
     },
   });
 
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setError(null);
+    setPending(true);
+
+    await authClient.signIn.email(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: () => {
+          setPending(false);
+          router.push("/");
+        },
+        onError: ({ error }) => {
+          setPending(false);
+          setError(error.message);
+        },
+      }
+    );
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <Form {...form}>
-            <form className="p-6 md:p-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
                   <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -83,13 +112,13 @@ export const SignInView = () => {
                     )}
                   />
                 </div>
-                {true && (
+                {!!error && (
                   <Alert className="bg-destructive/10 border-none">
                     <OctagonAlertIcon className="h-4 w-4 !text-destructive" />
-                    <AlertTitle>Error</AlertTitle>
+                    <AlertTitle>{error}</AlertTitle>
                   </Alert>
                 )}
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={pending}>
                   Sign In
                 </Button>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -101,6 +130,7 @@ export const SignInView = () => {
                   <Button
                     variant="outline"
                     type="button"
+                    disabled={pending}
                     className="w-full cursor-pointer"
                   >
                     Google
@@ -108,6 +138,7 @@ export const SignInView = () => {
                   <Button
                     variant="outline"
                     type="button"
+                    disabled={pending}
                     className="w-full cursor-pointer"
                   >
                     Github
