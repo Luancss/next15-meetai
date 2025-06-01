@@ -1,6 +1,16 @@
 "use client";
 
-import { Sidebar, SidebarHeader } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
 import { BotIcon, StarIcon, VideoIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,8 +42,32 @@ export const DashboardSidebar = () => {
       <SidebarHeader className="text-sidebar-accent-foreground">
         <Link href="/" className="flex items-center gap-2 px-2 pt-2">
           <Image src="logo.svg" alt="Meet.AI" width={36} height={36} />
+          <p className="text-2xl font-semibold">Meet.AI</p>
         </Link>
       </SidebarHeader>
+      <div className="px-4 py-2">
+        <Separator className="opacity-100 text-[#5D6B68]" />
+      </div>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {firstSection.map((item) => (
+                <SidebarMenuItem key={item.label}>
+                  <SidebarMenuButton>
+                    <Link href={item.href} className="flex items-center gap-2">
+                      <item.icon className="size-5 text-sidebar-accent-foreground" />
+                      <span className="text-sm font-medium tracking-tight">
+                        {item.label}
+                      </span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
     </Sidebar>
   );
 };
