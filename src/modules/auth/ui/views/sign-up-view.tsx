@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 import { z } from "zod";
 
 const formSchema = z
@@ -189,7 +190,11 @@ export const SignUpView = () => {
                     <AlertTitle>{error}</AlertTitle>
                   </Alert>
                 )}
-                <Button type="submit" className="w-full" disabled={pending}>
+                <Button
+                  type="submit"
+                  className="w-full cursor-pointer"
+                  disabled={pending}
+                >
                   Sign In
                 </Button>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -205,7 +210,7 @@ export const SignUpView = () => {
                     type="button"
                     className="w-full cursor-pointer"
                   >
-                    Google
+                    <FaGoogle className="mr-2" />
                   </Button>
                   <Button
                     variant="outline"
@@ -214,7 +219,7 @@ export const SignUpView = () => {
                     type="button"
                     className="w-full cursor-pointer"
                   >
-                    Github
+                    <FaGithub className="mr-2" />
                   </Button>
                 </div>
                 <div className="text-center text-sm">

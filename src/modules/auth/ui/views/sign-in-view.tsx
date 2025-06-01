@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 import { OctagonAlertIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -141,7 +142,11 @@ export const SignInView = () => {
                     <AlertTitle>{error}</AlertTitle>
                   </Alert>
                 )}
-                <Button type="submit" className="w-full" disabled={pending}>
+                <Button
+                  type="submit"
+                  className="w-full cursor-pointer"
+                  disabled={pending}
+                >
                   Sign In
                 </Button>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -157,7 +162,7 @@ export const SignInView = () => {
                     type="button"
                     className="w-full cursor-pointer"
                   >
-                    Google
+                    <FaGoogle className="mr-2" />
                   </Button>
                   <Button
                     disabled={pending}
@@ -166,7 +171,7 @@ export const SignInView = () => {
                     type="button"
                     className="w-full cursor-pointer"
                   >
-                    Github
+                    <FaGithub className="mr-2" />
                   </Button>
                 </div>
                 <div className="text-center text-sm">
