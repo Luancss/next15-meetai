@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 import { BotIcon, StarIcon, VideoIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,7 +55,11 @@ export const DashboardSidebar = () => {
             <SidebarMenu>
               {firstSection.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton>
+                  <SidebarMenuButton
+                    className={cn(
+                      "h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5D6B68]/10 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50 "
+                    )}
+                  >
                     <Link href={item.href} className="flex items-center gap-2">
                       <item.icon className="size-5 text-sidebar-accent-foreground" />
                       <span className="text-sm font-medium tracking-tight">
