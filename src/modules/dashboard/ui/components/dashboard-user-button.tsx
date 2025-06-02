@@ -10,13 +10,25 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ChevronDownIcon, CreditCardIcon, LogOutIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const DashboardUserButton = () => {
+  const router = useRouter();
   const { data, isPending } = authClient.useSession();
 
   if (isPending || !data?.user) {
     return null;
   }
+
+  const onLogout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/sign-in");
+        },
+      },
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -52,7 +64,10 @@ export const DashboardUserButton = () => {
           Billing
           <CreditCardIcon className="size-4" />
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer flex items-center justify-between">
+        <DropdownMenuItem
+          onClick={onLogout}
+          className="cursor-pointer flex items-center justify-between"
+        >
           Logout
           <LogOutIcon className="size-4" />
         </DropdownMenuItem>
