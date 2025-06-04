@@ -1,13 +1,20 @@
+"use client";
+
 import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from "./ui/drawer";
-import { Dialog, DialogContent, DialogHeader } from "./ui/dialog";
-import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+  DrawerDescription,
+} from "@/components/ui/drawer";
 
 interface ResponsiveDialogProps {
   title: string;
@@ -33,8 +40,8 @@ export const ResponsiveDialog = ({
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription>{description}</DrawerDescription>
-            <div className="p-4">{children}</div>
           </DrawerHeader>
+          <div className="p-4">{children}</div>
         </DrawerContent>
       </Drawer>
     );
