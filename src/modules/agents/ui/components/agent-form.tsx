@@ -12,9 +12,12 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { GeneratedAvatar } from "@/components/generated-avatar";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 interface AgentFormProps {
   onSucces?: () => void;
@@ -58,7 +61,7 @@ export const AgentForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <GeneratedAvatar
           seed={form.watch("name")}
           variant="botttsNeutral"
@@ -71,11 +74,43 @@ export const AgentForm = ({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="e.g. Math tutor" />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
+        <FormField
+          name="instructions"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Instructions</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder="You are a helpful assistant that can answer questions and help with assignments."
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex justify-between gap-x-2">
+          {onCancel && (
+            <Button
+              variant="ghost"
+              disabled={isPending}
+              type="button"
+              onClick={onCancel}
+            >
+              Cancel
+            </Button>
+          )}
+          <Button disabled={isPending} type="submit">
+            {isEdit ? "Update" : "Create"}
+          </Button>
+        </div>
       </form>
     </Form>
   );
