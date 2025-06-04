@@ -13,7 +13,7 @@ export const agentsRouter = createTRPCRouter({
       const [existingAgent] = await db
         .select({
           // TODO: Change to actual count of meetings
-          meetingsCount: sql<number>`5`,
+          meetingCount: sql<number>`5`,
           ...getTableColumns(agents),
         })
         .from(agents)
@@ -22,11 +22,27 @@ export const agentsRouter = createTRPCRouter({
       return existingAgent;
     }),
   // TODO: Change 'getMany' to use 'protectedProcecure'
-  getMany: protectedProcedure.query(async () => {
-    const data = db.select().from(agents);
+  getMany: protectedProcedure
+    .input(
+      z
+        .object({
+          page: z.number().min(1).default(1),
+          pageSize: z.number().min(1).max(100).default(10),
+          search: z.string().nullish(),
+        })
+        .optional()
+    )
+    .query(async () => {
+      const data = db
+        .select({
+          // TODO: Change to actual count of meetings
+          meetingCount: sql<number>`5`,
+          ...getTableColumns(agents),
+        })
+        .from(agents);
 
-    return data;
-  }),
+      return data;
+    }),
   create: protectedProcedure
     .input(agentsInsertSchema)
     .mutation(async ({ input, ctx }) => {
