@@ -1,32 +1,90 @@
+import { TRPCError } from "@trpc/server";
+import { and, count, desc, eq, getTableColumns, ilike, sql } from "drizzle-orm";
+import { z } from "zod";
+
+import {
+  DEFAULT_PAGE,
+  DEFAULT_PAGE_SIZE,
+  MAX_PAGE_SIZE,
+  MIN_PAGE_SIZE,
+} from "@/constants";
 import { db } from "@/db";
 import { agents } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
-import { eq, getTableColumns, sql } from "drizzle-orm";
-import { z } from "zod";
+
 import { agentsInsertSchema } from "../schemas";
 
 export const agentsRouter = createTRPCRouter({
-  // TODO: Change 'getOne' to use 'protectedProcecure'
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const [existingAgent] = await db
         .select({
-          // TODO: Change to actual count of meetings
-          meetingsCount: sql<number>`5`,
           ...getTableColumns(agents),
+          // TODO: Change to actual count of meetings
+          meetingCount: sql<number>`5`,
         })
         .from(agents)
-        .where(eq(agents.id, input.id));
+        .where(
+          and(eq(agents.id, input.id), eq(agents.userId, ctx.auth.user.id))
+        );
+
+      if (!existingAgent) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Agent not found" });
+      }
 
       return existingAgent;
     }),
-  // TODO: Change 'getMany' to use 'protectedProcecure'
-  getMany: protectedProcedure.query(async () => {
-    const data = db.select().from(agents);
+  getMany: protectedProcedure
+    .input(
+      z.object({
+        page: z.number().default(DEFAULT_PAGE),
+        pageSize: z
+          .number()
+          .min(MIN_PAGE_SIZE)
+          .max(MAX_PAGE_SIZE)
+          .default(DEFAULT_PAGE_SIZE),
+        search: z.string().nullish(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { search, page, pageSize } = input;
 
-    return data;
-  }),
+      const data = await db
+        .select({
+          ...getTableColumns(agents),
+          // TODO: Change to actual count of meetings
+          meetingCount: sql<number>`5`,
+        })
+        .from(agents)
+        .where(
+          and(
+            eq(agents.userId, ctx.auth.user.id),
+            search ? ilike(agents.name, `%${search}%`) : undefined
+          )
+        )
+        .orderBy(desc(agents.createdAt), desc(agents.id))
+        .limit(pageSize)
+        .offset((page - 1) * pageSize);
+
+      const [total] = await db
+        .select({ count: count() })
+        .from(agents)
+        .where(
+          and(
+            eq(agents.userId, ctx.auth.user.id),
+            search ? ilike(agents.name, `%${search}%`) : undefined
+          )
+        );
+
+      const totalPages = Math.ceil(total.count / pageSize);
+
+      return {
+        items: data,
+        total: total.count,
+        totalPages,
+      };
+    }),
   create: protectedProcedure
     .input(agentsInsertSchema)
     .mutation(async ({ input, ctx }) => {
