@@ -1,7 +1,6 @@
 import { useTRPC } from "@/trpc/client";
 import { AgentGetOne } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { agentsInsertSchema } from "../../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +17,7 @@ import { GeneratedAvatar } from "@/components/generated-avatar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface AgentFormProps {
   onSucces?: () => void;
@@ -30,7 +30,6 @@ export const AgentForm = ({
   initialValues,
 }: AgentFormProps) => {
   const trpc = useTRPC();
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const createAgent = useMutation(
@@ -46,7 +45,11 @@ export const AgentForm = ({
         onSucces?.();
       },
 
-      onError: () => {},
+      onError: (error) => {
+        toast.error(error.message);
+
+        // TODO: Check if error code ir "FORBIDDEN", redirect to /
+      },
     })
   );
 
