@@ -3,7 +3,12 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { AgentGetOne } from "../../types";
 import { GeneratedAvatar } from "@/components/generated-avatar";
-import { CornerDownRightIcon, CornerRightDownIcon } from "lucide-react";
+import {
+  CornerDownRightIcon,
+  CornerRightDownIcon,
+  VideoIcon,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -40,5 +45,17 @@ export const columns: ColumnDef<AgentGetOne>[] = [
         </div>
       );
     },
+  },
+  {
+    accessorKey: "meetingCount",
+    header: "Meetings",
+    cell: () => (
+      <Badge
+        variant="outline"
+        className="flex items-center gap-x-2 [&>svg]:size-4"
+      >
+        <VideoIcon className="text-blue-700" />5 meetings
+      </Badge>
+    ),
   },
 ];
