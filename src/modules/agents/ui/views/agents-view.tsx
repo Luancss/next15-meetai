@@ -7,6 +7,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { columns, Payment } from "../components/columns";
 import { DataTable } from "../components/data-table";
 import { EmptyState } from "@/components/empty-state";
+import { useAgentsFilters } from "../../hooks/use-agents-filters";
 
 const mockData: Payment[] = [
   {
@@ -18,8 +19,14 @@ const mockData: Payment[] = [
 ];
 
 export const AgentsView = () => {
+  const [filters] = useAgentsFilters();
+
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.agents.getMany.queryOptions({}));
+  const { data } = useSuspenseQuery(
+    trpc.agents.getMany.queryOptions({
+      ...filters,
+    })
+  );
 
   return (
     <div className="flex-1 pb-4 px-4 md:px-8 flex flex-col gap-y-4">
