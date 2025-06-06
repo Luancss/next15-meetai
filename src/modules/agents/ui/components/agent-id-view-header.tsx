@@ -1,3 +1,18 @@
+import Link from "next/link";
+import {
+  ChevronRightIcon,
+  TrashIcon,
+  PencilIcon,
+  MoreVerticalIcon,
+} from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+  DropdownMenuContent,
+} from "@/components/ui/dropdown-menu";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -5,8 +20,6 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ChevronRightIcon } from "lucide-react";
-import Link from "next/link";
 
 interface Props {
   agentId: string;
@@ -30,8 +43,8 @@ export const AgentIdViewHeader = ({
               <Link href="/agents">My Agents</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
-          <BreadcrumbSeparator>
-            <ChevronRightIcon className="text-muted-foreground text-xl font-medium [&>svg]:size-4" />
+          <BreadcrumbSeparator className="text-foreground text-xl font-medium [&>svg]:size-4">
+            <ChevronRightIcon />
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <BreadcrumbLink
@@ -43,6 +56,24 @@ export const AgentIdViewHeader = ({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+      {/* Without modal={false}, the dialog that this dropdown opens cause the website to get unclickable */}
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost">
+            <MoreVerticalIcon />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={onEdit}>
+            <PencilIcon className="size-4 text-black" />
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={onRemove}>
+            <TrashIcon className="size-4 text-black" />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
