@@ -2,7 +2,7 @@ import {
   AgentsView,
   AgentsViewError,
   AgentsViewLoading,
-} from "@/modules/agents/ui/views/agents-view";
+} from "@/modules/agents/ui/views/agent-view";
 
 import { AgentsListHeader } from "@/modules/agents/ui/components/agents-list-header";
 import { getQueryClient, trpc } from "@/trpc/server";
