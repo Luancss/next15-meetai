@@ -61,7 +61,7 @@ export const AgentIdView = ({ agentId }: Props) => {
 
   return (
     <>
-      aa <RemoveConfirmation />
+      <RemoveConfirmation />
       <UpdatedAgentDialog
         open={updateAgentDialogOpen}
         onOpenChange={setUpdateAgentDialogOpen}
