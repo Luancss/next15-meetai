@@ -1,4 +1,3 @@
-import { GeneratedAvatar } from "@/components/generated-avatar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,7 +18,7 @@ import { meetingsInsertSchema } from "../../schemas";
 import { MeetingGetOne } from "../../types";
 
 interface MeetingFormProps {
-  onSucces?: () => void;
+  onSucces?: (id?: string) => void;
   onCancel?: () => void;
   initialValues?: MeetingGetOne;
 }
@@ -33,7 +32,7 @@ export const MeetingForm = ({
 
   const createMeeting = useMutation(
     trpc.meetings.create.mutationOptions({
-      onSuccess: async () => {
+      onSuccess: async (data) => {
         await queryClient.invalidateQueries(
           trpc.meetings.getMany.queryOptions({})
         );
@@ -43,7 +42,7 @@ export const MeetingForm = ({
             trpc.agents.getOne.queryOptions({ id: initialValues.id })
           );
         }
-        onSucces?.();
+        onSucces?.(data.id);
       },
 
       onError: (error) => {
@@ -99,11 +98,6 @@ export const MeetingForm = ({
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-        <GeneratedAvatar
-          seed={form.watch("name")}
-          variant="botttsNeutral"
-          className="border size-16"
-        />
         <FormField
           name="name"
           control={form.control}
@@ -111,7 +105,7 @@ export const MeetingForm = ({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="e.g. Math tutor" />
+                <Input {...field} placeholder="e.g. Math Consultations" />
               </FormControl>
               <FormMessage />
             </FormItem>
