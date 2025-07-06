@@ -1,5 +1,6 @@
 "use client";
 
+import { DataTable } from "@/components/data-table";
 import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
 import { useTRPC } from "@/trpc/client";
@@ -9,7 +10,11 @@ export const MeetingsView = () => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.meetings.getMany.queryOptions({}));
 
-  return <div>{JSON.stringify(data, null, 2)}</div>;
+  return (
+    <div>
+      <DataTable data={data.items} />
+    </div>
+  );
 };
 
 export const MeetingsViewLoading = () => {
