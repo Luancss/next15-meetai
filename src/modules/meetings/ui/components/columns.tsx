@@ -10,10 +10,12 @@ import {
   CircleCheckIcon,
   CircleXIcon,
   ClockArrowUpIcon,
+  ClockFadingIcon,
   CornerDownRightIcon,
   LoaderIcon,
   VideoIcon,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -79,17 +81,44 @@ export const columns: ColumnDef<MeetingGetMany[number]>[] = [
     },
   },
   {
-    accessorKey: "meetingCount",
-    header: "Meetings",
-    cell: ({ row }) => (
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      const Icon =
+        statusIconMap[row.original.status as keyof typeof statusIconMap] ||
+        LoaderIcon;
+
+      return (
+        <Badge
+          variant="outline"
+          className={cn(
+            "capitalize [&>svg]:size-4 text-muted-foreground",
+            statusColorMap[row.original.status as keyof typeof statusColorMap]
+          )}
+        >
+          <Icon
+            className={cn(
+              row.original.status === "processing" && "animate-spin"
+            )}
+          />
+          {row.original.status}
+        </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: "duration",
+    header: "Duration",
+    cell: ({ row }) => {
       <Badge
         variant="outline"
-        className="flex items-center gap-x-2 [&>svg]:size-4"
+        className="capitalize [&>svg]:size-4 flex items-center gap-x-2"
       >
-        <VideoIcon className="text-blue-700" />
-        {row.original.meetingCount}{" "}
-        {row.original.meetingCount === 1 ? "Meeting" : "Meetings"}
-      </Badge>
-    ),
+        <ClockFadingIcon className="text-blue-700" />
+        {row.original.duration
+          ? formatDuration(row.original.duration)
+          : "No duration"}
+      </Badge>;
+    },
   },
 ];
