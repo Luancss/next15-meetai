@@ -2,6 +2,12 @@ import { ReactNode, useState } from "react";
 import { Button } from "./ui/button";
 import { ChevronDown, ChevronsUpDownIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandResponsiveDialog,
+} from "./ui/command";
 
 interface Props {
   options: Array<{
@@ -9,7 +15,7 @@ interface Props {
     value: string;
     children: ReactNode;
   }>;
-  onChange: (value: string) => void;
+  onSelect: (value: string) => void;
   onSearch?: (value: string) => void;
   value: string;
   placeholder?: string;
@@ -19,11 +25,10 @@ interface Props {
 
 const CommandSelect = ({
   options,
-  onChange,
+  onSelect,
   onSearch,
   value,
-  placeholder,
-  isSerchable,
+  placeholder = "Select an option",
   className,
 }: Props) => {
   const [open, setOpen] = useState(false);
@@ -43,6 +48,23 @@ const CommandSelect = ({
         <div>{selectedOption?.children ?? placeholder}</div>
         <ChevronsUpDownIcon />
       </Button>
+      <CommandResponsiveDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Search..." onValueChange={onSearch} />
+        <CommandEmpty className="text-muted-foreground text-sm">
+          <span>No options found</span>
+        </CommandEmpty>
+        {options.map((option) => (
+          <CommandItem
+            key={option.id}
+            onSelect={() => {
+              onSelect(option.value);
+              setOpen(false);
+            }}
+          >
+            {option.children}
+          </CommandItem>
+        ))}
+      </CommandResponsiveDialog>
     </>
   );
 };
