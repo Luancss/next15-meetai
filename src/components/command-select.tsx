@@ -49,7 +49,11 @@ const CommandSelect = ({
         <div>{selectedOption?.children ?? placeholder}</div>
         <ChevronsUpDownIcon />
       </Button>
-      <CommandResponsiveDialog open={open} onOpenChange={setOpen}>
+      <CommandResponsiveDialog
+        shouldFilter={!onSearch}
+        open={open}
+        onOpenChange={setOpen}
+      >
         <CommandInput placeholder="Search..." onValueChange={onSearch} />
         <CommandEmpty className="text-muted-foreground text-sm">
           <span>No options found</span>
