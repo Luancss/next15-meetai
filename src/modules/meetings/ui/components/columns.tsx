@@ -108,8 +108,8 @@ export const columns: ColumnDef<MeetingGetMany[number]>[] = [
   },
   {
     accessorKey: "duration",
-    header: "Duration",
-    cell: ({ row }) => {
+    header: "duration",
+    cell: ({ row }) => (
       <Badge
         variant="outline"
         className="capitalize [&>svg]:size-4 flex items-center gap-x-2"
@@ -118,7 +118,7 @@ export const columns: ColumnDef<MeetingGetMany[number]>[] = [
         {row.original.duration
           ? formatDuration(row.original.duration)
           : "No duration"}
-      </Badge>;
-    },
+      </Badge>
+    ),
   },
 ];
