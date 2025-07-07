@@ -1,25 +1,12 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { AgentGetOne } from "../../types";
 import { GeneratedAvatar } from "@/components/generated-avatar";
-import {
-  CornerDownRightIcon,
-  CornerRightDownIcon,
-  VideoIcon,
-} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { ColumnDef } from "@tanstack/react-table";
+import { CornerDownRightIcon, VideoIcon } from "lucide-react";
+import { AgentsGetMany } from "../../types";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
-export const columns: ColumnDef<AgentGetOne>[] = [
+export const columns: ColumnDef<AgentsGetMany[number]>[] = [
   {
     accessorKey: "name",
     header: "Agent Name",

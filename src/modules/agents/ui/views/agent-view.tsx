@@ -1,24 +1,15 @@
 "use client";
 
+import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { columns, Payment } from "../components/columns";
-import { DataTable } from "../components/data-table";
-import { EmptyState } from "@/components/empty-state";
-import { useAgentsFilters } from "../../hooks/use-agents-filters";
-import { DataPagination } from "../components/data-pagination";
 import { useRouter } from "next/navigation";
-
-const mockData: Payment[] = [
-  {
-    id: "728ed52f",
-    amount: 100,
-    status: "pending",
-    email: "m@example.com",
-  },
-];
+import { useAgentsFilters } from "../../hooks/use-agents-filters";
+import { columns } from "../components/columns";
+import { DataPagination } from "../components/data-pagination";
+import { DataTable } from "@/components/data-table";
 
 export const AgentsView = () => {
   const router = useRouter();
