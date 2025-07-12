@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { NewMeetingDialog } from "./new-meeting-dialog";
 import { useState } from "react";
+import { AgentsSearchFilter } from "@/modules/agents/ui/components/agents-search-filter";
+import { StatusFilter } from "./status-filter";
 
 export const MeetingsListHeader = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -19,7 +21,10 @@ export const MeetingsListHeader = () => {
             New Meeting
           </Button>
         </div>
-        <div className="flex items-center gap-x-2 p-1">TODO: Filters</div>
+        <div className="flex items-center gap-x-2 p-1">
+          <AgentsSearchFilter />
+          <StatusFilter />
+        </div>
       </div>
     </>
   );
