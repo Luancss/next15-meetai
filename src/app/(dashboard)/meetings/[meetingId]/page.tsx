@@ -1,7 +1,15 @@
 import { auth } from "@/lib/auth";
+import { MeetingIdView } from "@/modules/meetings/ui/views/meetings-id.view";
+import {
+  MeetingsViewError,
+  MeetingsViewLoading,
+} from "@/modules/meetings/ui/views/meetings-view";
 import { getQueryClient, trpc } from "@/trpc/server";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 interface Props {
   params: Promise<{
@@ -24,7 +32,15 @@ const Page = async ({ params }: Props) => {
     redirect("/sign-in");
   }
 
-  return <div></div>;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense fallback={<MeetingsViewLoading />}>
+        <ErrorBoundary fallback={<MeetingsViewError />}>
+          <MeetingIdView meetingId={meetingId} />
+        </ErrorBoundary>
+      </Suspense>
+    </HydrationBoundary>
+  );
 };
 
 export default Page;
