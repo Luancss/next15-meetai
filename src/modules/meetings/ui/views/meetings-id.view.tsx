@@ -2,6 +2,7 @@
 
 import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
+import { useConfirm } from "@/hooks/use-confirm";
 import { useTRPC } from "@/trpc/client";
 import {
   useMutation,
@@ -9,9 +10,9 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { MeetingIdViewHeader } from "../components/meeting-id-view-header";
-import { useConfirm } from "@/hooks/use-confirm";
+import { UpdateMeetingDialog } from "../components/update-meeting-dialog copy";
+import { useState } from "react";
 
 interface Props {
   meetingId: string;
@@ -21,6 +22,8 @@ export const MeetingIdView = ({ meetingId }: Props) => {
   const trpc = useTRPC();
   const router = useRouter();
   const queryCliet = useQueryClient();
+
+  const [updateMeetingDialogOpen, setUpdateMeetingDialogOpen] = useState(false);
 
   const [RemoveConfirmation, confirmRemove] = useConfirm(
     "Are you sure?",
@@ -51,6 +54,11 @@ export const MeetingIdView = ({ meetingId }: Props) => {
   return (
     <>
       <RemoveConfirmation />
+      <UpdateMeetingDialog
+        open={updateMeetingDialogOpen}
+        onOpenChange={() => setUpdateMeetingDialogOpen(false)}
+        initialValues={data}
+      />
       <div className="flex-1 py-4 px-4 md:px-8 flex flex-col gap-y-4">
         <MeetingIdViewHeader
           meetingId={meetingId}
