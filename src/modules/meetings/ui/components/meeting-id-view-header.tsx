@@ -28,7 +28,7 @@ interface Props {
   onRemove: () => void;
 }
 
-export const AgentIdViewHeader = ({
+export const MeetingIdViewHeader = ({
   agentId,
   agentName,
   onEdit,
