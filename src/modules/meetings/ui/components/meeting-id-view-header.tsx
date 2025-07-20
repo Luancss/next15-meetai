@@ -22,15 +22,15 @@ import {
 } from "@/components/ui/breadcrumb";
 
 interface Props {
-  agentId: string;
-  agentName: string;
+  meetingId: string;
+  meetingName: string;
   onEdit: () => void;
   onRemove: () => void;
 }
 
-export const AgentIdViewHeader = ({
-  agentId,
-  agentName,
+export const MeetingIdViewHeader = ({
+  meetingId,
+  meetingName,
   onEdit,
   onRemove,
 }: Props) => {
@@ -51,7 +51,7 @@ export const AgentIdViewHeader = ({
               asChild
               className="font-medium text-xl text-foreground"
             >
-              <Link href={`/agents/${agentId}`}>{agentName}</Link>
+              <Link href={`/agents/${meetingId}`}>{meetingName}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
