@@ -15,6 +15,7 @@ import { UpdateMeetingDialog } from "../components/update-meeting-dialog copy";
 import { useState } from "react";
 import { meetings } from "@/db/schema";
 import { UpcomingState } from "../components/upcoming-state";
+import { ActiveState } from "../components/active-state";
 
 interface Props {
   meetingId: string;
@@ -77,7 +78,14 @@ export const MeetingIdView = ({ meetingId }: Props) => {
         {isCancelled && <div>Cancelled</div>}
         {isProcessing && <div>Processing</div>}
         {isCompleted && <div>Completed</div>}
-        {isUpcoming && <UpcomingState />}
+        {isActive && <ActiveState meetingId={meetingId} />}
+        {isUpcoming && (
+          <UpcomingState
+            meetingId={meetingId}
+            onCancelMeeting={() => {}}
+            isCancelling={false}
+          />
+        )}
       </div>
     </>
   );
