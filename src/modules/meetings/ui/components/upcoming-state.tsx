@@ -1,4 +1,7 @@
 import { EmptyState } from "@/components/empty-state";
+import { Button } from "@/components/ui/button";
+import { BanIcon, VideoIcon } from "lucide-react";
+import Link from "next/link";
 
 export const UpcomingState = () => {
   return (
@@ -8,6 +11,18 @@ export const UpcomingState = () => {
         title="No started yet"
         description="Onde you start this meeting, a summary will appear here"
       />
+      <div className="flex flex-col-reverse lg-flex-row lg:justify-center items-center gap-2 w-full">
+        <Button variant="secondary" className="w-full lg:w-auto">
+          <BanIcon />
+          Cancel meeting
+        </Button>
+        <Button asChild className="w-full lg:w-auto">
+          <Link href={`/call/${123}`}>
+            <VideoIcon />
+            Start meeting
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 };
