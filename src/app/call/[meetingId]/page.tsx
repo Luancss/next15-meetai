@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { CallView } from "@/modules/call/ui/views/call-view";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { headers } from "next/headers";
@@ -8,7 +9,7 @@ interface Props {
   params: Promise<{ meetingId: string }>;
 }
 
-export const Page = ({ params }: Props) => {
+const Page = async ({ params }: Props) => {
   const { meetingId } = await params;
 
   const session = await auth.api.getSession({
@@ -26,7 +27,9 @@ export const Page = ({ params }: Props) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <CallView />
+      <CallView meetingId={meetingId} />
     </HydrationBoundary>
   );
 };
+
+export default Page;
