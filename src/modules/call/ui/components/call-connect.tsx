@@ -14,6 +14,7 @@ import { useTRPC } from "@/trpc/client";
 
 import "@stream-io/video-react-sdk/dist/css/index.css";
 import { LoaderIcon } from "lucide-react";
+import { CallUI } from "./call-ui";
 
 interface Props {
   meetingId: string;
@@ -87,7 +88,7 @@ export const CallConnect = ({
   return (
     <StreamVideo client={client}>
       <StreamCall call={call}>
-        <CallUI />
+        <CallUI meetingName={meetingName} />
       </StreamCall>
     </StreamVideo>
   );
