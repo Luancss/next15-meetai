@@ -35,7 +35,27 @@ export const CallConnect = ({
     trpc.meetings.generateToken.mutationOptions()
   );
 
-  const [client, setClient] = useState<StreamVideoClient | null>(null);
+  const [client, setClient] = useState<StreamVideoClient | undefined>(
+    undefined
+  );
+  useEffect(() => {
+    const _client = new StreamVideoClient({
+      apiKey: process.env.NEXT_PUBLIC_STREAM_API_KEY!,
+      user: {
+        id: userId,
+        name: userName,
+        image: userImage,
+      },
+      tokenProvider: generateToken,
+    });
+    setClient(_client);
+
+    return () => {
+      _client.disconnectUser();
+      setClient(undefined);
+    };
+  }, [userId]);
+
   const [call, setCall] = useState<Call | null>(null);
   const [callingState, setCallingState] = useState<CallingState | null>(null);
 
