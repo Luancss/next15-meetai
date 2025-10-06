@@ -4,6 +4,7 @@ import {
   DefaultVideoPlaceholder,
   StreamVideoParticipant,
   useCallStateHooks,
+  VideoPreview,
 } from "@stream-io/video-react-sdk";
 
 interface Props {
@@ -30,6 +31,14 @@ const DisabledVideoPreview = () => {
   );
 };
 
+const AllowBrowserPermissions = () => {
+  return (
+    <p className="text-sm">
+      Please grant your browser a permission to access your camera and microphone.
+    </p>
+  )
+}
+
 export const CallLobby = ({ onJoin }: Props) => {
   const { useCameraState, useMicrophoneState } = useCallStateHooks();
 
@@ -46,6 +55,11 @@ export const CallLobby = ({ onJoin }: Props) => {
             <h6 className="text-lg font-medium">Ready to join?</h6>
             <p className="text-sm">Set up your call before joining</p>
           </div>
+          <VideoPreview 
+            DisabledVideoPreview={
+              hasBrowserMediaPermissions ? DisabledVideoPreview : AllowBrowserPermissions
+            }
+          />
         </div>
       </div>
     </div>
