@@ -1,8 +1,34 @@
-import { useCallStateHooks } from "@stream-io/video-react-sdk";
+import { authClient } from "@/lib/auth-client";
+import { generateAvatarUri } from "@/lib/avatar";
+import {
+  DefaultVideoPlaceholder,
+  StreamVideoParticipant,
+  useCallStateHooks,
+} from "@stream-io/video-react-sdk";
 
 interface Props {
   onJoin: () => void;
 }
+
+const DisabledVideoPreview = () => {
+  const { data } = authClient.useSession();
+
+  return (
+    <DefaultVideoPlaceholder
+      participant={
+        {
+          name: data?.user?.name || "",
+          image:
+            data?.user.image ??
+            generateAvatarUri({
+              seed: data?.user?.name || "",
+              variant: "initials",
+            }),
+        } as StreamVideoParticipant
+      }
+    />
+  );
+};
 
 export const CallLobby = ({ onJoin }: Props) => {
   const { useCameraState, useMicrophoneState } = useCallStateHooks();
