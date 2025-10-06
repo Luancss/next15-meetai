@@ -12,7 +12,7 @@ import {
 
 import { useTRPC } from "@/trpc/client";
 
-import "@stream-io/video-react-sdk/dist/css/index.css";
+// import "@stream-io/video-react-sdk/dist/css/index.css";
 import { LoaderIcon } from "lucide-react";
 import { CallUI } from "./call-ui";
 
