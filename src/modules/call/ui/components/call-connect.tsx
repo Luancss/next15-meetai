@@ -83,7 +83,7 @@ export const CallConnect = ({
     );
   }
 
-  const [callingState, setCallingState] = useState<CallingState | null>(null);
+  // const [callingState, setCallingState] = useState<CallingState | null>(null);
 
   return (
     <StreamVideo client={client}>
