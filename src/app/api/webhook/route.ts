@@ -68,7 +68,8 @@ export async function POST(req: NextRequest) {
           eq(meetings.id, meetingId),
           not(eq(meetings.status, "completed")),
           not(eq(meetings.status, "active")),
-          not(eq(meetings.status, "cancelled"))
+          not(eq(meetings.status, "cancelled")),
+          not(eq(meetings.status, "processing"))
         )
       )
 
@@ -85,7 +86,19 @@ export async function POST(req: NextRequest) {
         status: "active",
         startedAt: new Date(),
       })
-      .where(eq(meetings.id, existingMeeting.id))
+      .where(eq(meetings.id, existingMeeting.id));
+
+      const [existingAgent] = await db
+        .select()
+        .from(agents)
+        .where(eq(agents.id, existingMeeting.agentId));
+
+      if (!existingAgent) {
+        return NextResponse.json(
+          {error: "Agent not found"},
+          {status: 404}
+        )
+      }
   }
 
   return NextResponse.json({status: "ok"});
