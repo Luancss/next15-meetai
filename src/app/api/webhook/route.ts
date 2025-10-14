@@ -71,6 +71,21 @@ export async function POST(req: NextRequest) {
           not(eq(meetings.status, "cancelled"))
         )
       )
+
+    if (!existingMeeting) {
+      return NextResponse.json(
+        {error: "Meeting not found"},
+        {status: 404}
+      )
+    }
+
+    await db.
+      update(meetings)
+      .set({
+        status: "active",
+        startedAt: new Date(),
+      })
+      .where(eq(meetings.id, existingMeeting.id))
   }
 
   return NextResponse.json({status: "ok"});
