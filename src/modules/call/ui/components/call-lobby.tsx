@@ -12,6 +12,8 @@ import {
 import { LogInIcon } from "lucide-react";
 import Link from "next/link";
 
+import "@stream-io/video-react-sdk/dist/css/styles.css";
+
 interface Props {
   onJoin: () => void;
 }
