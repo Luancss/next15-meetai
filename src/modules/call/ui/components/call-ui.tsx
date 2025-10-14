@@ -2,6 +2,7 @@ import { StreamTheme, useCall } from "@stream-io/video-react-sdk";
 import { useState } from "react";
 import { CallLobby } from "./call-lobby";
 import { CallActive } from "./call-active";
+import { CallEnded } from "./call-ended";
 
 interface Props {
   meetingName: string;
@@ -30,7 +31,7 @@ export const CallUI = ({ meetingName }: Props) => {
     <StreamTheme className="h-full">
       {show === "lobby" && <CallLobby onJoin={handleJoin} />}
       {show === "call" && <CallActive meetingName={meetingName} onLeave={handleLeave} />}
-      {show === "ended" && <p>ended</p>}
+      {show === "ended" && <CallEnded />}
     </StreamTheme>
   );
 };
