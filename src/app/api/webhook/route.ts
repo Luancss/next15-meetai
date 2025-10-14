@@ -11,6 +11,7 @@ import { agents, meetings } from "@/db/schema";
 import { TRPCError } from "@trpc/server";
 import { streamVideo } from "@/lib/stream-video";
 import { NextRequest, NextResponse } from "next/server";
+import { and, eq, not } from "drizzle-orm";
 
 function verifySignatureWidhSDK(body: string, signature: string): boolean {
   return streamVideo.verifyWebhook(body, signature);
@@ -51,6 +52,25 @@ export async function POST(req: NextRequest) {
   if (eventType.type === "call.session_started") {
     const event = payload as CallSessionStartedEvent;
     const meetingId = event.call.custom?.meetingId;
+
+    if (!meetingId) {
+      return NextResponse.json(
+        {error: "Missing meetingId"},
+        {status: 400}
+      )
+    }
+
+    const [existingMeeting] = await db
+      .select()
+      .from(meetings)
+      .where(
+        and(
+          eq(meetings.id, meetingId),
+          not(eq(meetings.status, "completed")),
+          not(eq(meetings.status, "active")),
+          not(eq(meetings.status, "cancelled"))
+        )
+      )
   }
 
   return NextResponse.json({status: "ok"});
